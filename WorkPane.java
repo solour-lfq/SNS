@@ -92,11 +92,12 @@ public class WorkPane extends Pane {
 		pivot.setStroke(color);
 		circle.setStroke(color);
 		circle.setFill(color);
+		pivot.setStyle("-fx-stroke-width:5;");
 		this.getChildren().addAll(pivot, circle);
 	}
 	
 	public void addLolly(double startX, double startY, double endX, double endY) {
-		addLolly(startX, startY, endX, endY, Color.BLACK);	
+		addLolly(startX, startY, endX, endY, Color.WHITE);	
 	}
 	
 	public void addCube(double x, double y, double da, double db, double dc, Color color) {
@@ -155,6 +156,16 @@ public class WorkPane extends Pane {
 		addCos(512, 360, A, omega, phi);
 	}
 
+	public void addDCos(double centerX, double centerY, double A, double omega, double phi, Color color) {
+		for (double i = 0; i < 1024; i += 16) {
+			this.addLolly(i, 360, i, centerY - cosP1 * A * Math.cos((i - 512) / 16 * omega + phi), color);
+		}
+	}	
+
+	public void addDCos(double A, double omega, double phi) {
+		addDCos(512, 360, A, omega, phi, Color.WHITE);
+	}
+
 	public void addWave(double a0, ArrayList<Double> list) {
 		Wave wave = new Wave();
 		wave.a0 = a0;
@@ -177,6 +188,24 @@ public class WorkPane extends Pane {
 		polyline.setStroke(Color.WHITE);
 		polyline.setStyle("-fx-stroke-width: 3;");
 		this.getChildren().add(polyline);
+	}
+
+	public void addDWave(double a0, ArrayList<Double> list) {
+		Wave wave = new Wave();
+		wave.a0 = a0;
+		for (int i = 0; i < list.size() - 1; i += 2) {
+			double temp1 = list.get(i);
+			double temp2 = list.get(i + 1);
+			Cos cos = new Cos(temp1, temp2);
+			wave.spectrum.add(cos);
+		}
+		for (double i = 0; i < 1024; i += 16) {
+			double sum = 0;
+			for (int j = 0; j < wave.spectrum.size(); ++j) {
+				sum -= cosP1 * wave.spectrum.get(j).A * Math.cos((i - 512) / cosP2 * Math.PI * wave.spectrum.get(j).omega);
+			}	
+			this.addLolly(i, 360, i, -a0 * cosP1 + 360 + sum);
+		}
 	}
 	
 	public void moveCos() {

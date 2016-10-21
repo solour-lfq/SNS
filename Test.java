@@ -20,6 +20,7 @@ public class Test extends Application {
 		});
 		workpane.addArrow(0, 360, 1024, 360);
 		workpane.addArrow(512, 720, 512, 0);	
+		/*
 		ArrayList<Double> arraylist = new ArrayList<Double>();
 		for (int i = 1; i <= 20; ++i) {
 			int key = 2 * i - 1;
@@ -29,7 +30,9 @@ public class Test extends Application {
 			arraylist.add(1 / Math.PI / key);
 			arraylist.add(Math.PI / 4 * (0 - key));
 		}
-		workpane.addWave(0.5, arraylist);
+		workpane.addDWave(0.5, arraylist);
+		*/
+		workpane.addDCos(1, 15 * Math.PI / 8, 0);
 		Scene scene = new Scene(workpane, 1024, 720);
 		primaryStage.setScene(scene);
 		primaryStage.show();
